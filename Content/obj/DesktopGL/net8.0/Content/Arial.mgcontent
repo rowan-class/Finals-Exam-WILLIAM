@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SourceFile>/Users/jiaweilyu/Code/MonoGame/Intro Game Programming/Finals-Exam/Content/Arial.spritefont</SourceFile>
+  <SourceTime>2025-10-19T21:51:25.4647971-04:00</SourceTime>
+  <DestFile>/Users/jiaweilyu/Code/MonoGame/Intro Game Programming/Finals-Exam/Content/bin/DesktopGL/Content/Arial.xnb</DestFile>
+  <DestTime>2025-12-17T16:12:10.8938851-05:00</DestTime>
+  <Importer>FontDescriptionImporter</Importer>
+  <ImporterTime>2025-06-02T06:31:02-04:00</ImporterTime>
+  <Processor>FontDescriptionProcessor</Processor>
+  <ProcessorTime>2025-06-02T06:31:02-04:00</ProcessorTime>
+  <Parameters>
+    <Key>PremultiplyAlpha</Key>
+    <Value>True</Value>
+  </Parameters>
+  <Parameters>
+    <Key>TextureFormat</Key>
+    <Value>Compressed</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

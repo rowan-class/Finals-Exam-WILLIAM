@@ -10,6 +10,7 @@ namespace Finals_Exam;
 public class Game1 : Game
 {
     public Random random = new();
+    public SpriteFont font;
     #region Renderer variables
     private GraphicsDeviceManager _graphics;
     public SpriteBatch spriteBatch;
@@ -17,20 +18,23 @@ public class Game1 : Game
     #endregion
 
     #region Grid data
-    public enum GridState { Empty, Snake, Fruit }
+    public enum GridState { Empty, Snake, Apple, Banana, Blueberry }
     public List<Primitives> primitives = new();
     public GridState[,] grid;
     public Point gridSize = new(20, 20);
     public int tileSize = 32;
-    public Point fruitPos;
+    public enum FruitStates { Apple, Banana, Blueberry }
+    public FruitStates fruitState;
+    public Point? fruitPos;
     #endregion
 
     #region Snake data
     public List<Point> snake = new();
     public enum SnakeDirection { Left, Up, Right, Down}
     public SnakeDirection direction = SnakeDirection.Up;
-    public float moveTime = 1000;
+    public float moveTime = 200;
     public float moveTimer = 0;
+    public int score = 0;
     #endregion
 
     public Game1()
@@ -56,6 +60,8 @@ public class Game1 : Game
         primitives.Add(new Primitives(GraphicsDevice, Color.Brown));
         primitives.Add(new Primitives(GraphicsDevice, Color.Green));
         primitives.Add(new Primitives(GraphicsDevice, Color.Red));
+        primitives.Add(new Primitives(GraphicsDevice, Color.Yellow));
+        primitives.Add(new Primitives(GraphicsDevice, Color.Blue));
 
         snake.Add(new Point(gridSize.X / 2, gridSize.Y / 2));
         snake.Add(new Point(gridSize.X / 2, gridSize.Y / 2));
@@ -69,7 +75,8 @@ public class Game1 : Game
     protected override void LoadContent()
     {
         // TODO: use this.Content to load your game content here
-        // Erm actually this is useless because I LoadContent with my AssetManager.LoadContents
+        
+        font = Content.Load<SpriteFont>("Arial");
     }
 
     protected override void Update(GameTime gameTime)
@@ -79,20 +86,55 @@ public class Game1 : Game
 
         // TODO: Add your update logic here
         moveTimer += gameTime.ElapsedGameTime.Milliseconds;
-        if (moveTimer > moveTime)
+        if (moveTimer > moveTime * MathF.Pow(0.7f, score % 3))
         {
             moveTimer = 0;
             SnakeMove();
         }
+
+        if (!fruitPos.HasValue)
+        {
+            fruitPos = GetRandomGridPosWithCondition(state => state == GridState.Empty);
+            int num = random.Next(10);
+            if (num < 1)
+            {
+                fruitState = FruitStates.Blueberry;
+            }
+            else if (num < 4)
+            {
+                fruitState = FruitStates.Banana;
+            }
+            else
+            {
+                fruitState = FruitStates.Apple;
+            }
+        }
+
 
 
         for (int k = 0; k < grid.GetLength(0); k++)
         {
             for (int l = 0; l < grid.GetLength(1); l++)
             {
-                if (snake.Contains(new Point(k, l)))
+                Point point = new Point(k, l);
+                if (snake.Contains(point))
                 {
                     grid[k, l] = GridState.Snake;
+                }
+                else if (fruitPos.HasValue && point == fruitPos.Value)
+                {
+                    if (fruitState == FruitStates.Apple)
+                    {
+                        grid[k, l] = GridState.Apple;
+                    }
+                    else if (fruitState == FruitStates.Banana)
+                    {
+                        grid[k, l] = GridState.Banana;
+                    }
+                    else if (fruitState == FruitStates.Blueberry)
+                    {
+                        grid[k, l] = GridState.Blueberry;
+                    }
                 }
                 else
                 {
@@ -140,6 +182,10 @@ public class Game1 : Game
                     color: Color.White);
             }
         }
+        string text = $"score = {score}";
+        Vector2 stringSize = font.MeasureString(text);
+
+        spriteBatch.DrawString(font, text, new(stringSize.X / 2, stringSize.Y / 2), Color.Crimson);
 
         spriteBatch.End();
         base.Draw(gameTime);
@@ -166,9 +212,31 @@ public class Game1 : Game
                 break;
         }
         newHead = snake[0] + dir;
+
+        if (fruitPos.HasValue && fruitPos == newHead)
+        {
+            fruitPos = null;
+            if (fruitState == FruitStates.Apple)
+            {
+                snake.Add(new Point(snake[^1].X, snake[^1].Y)); score++;
+            }
+            else if (fruitState == FruitStates.Banana)
+            {
+                snake.Add(new Point(snake[^1].X, snake[^1].Y)); score++;
+                snake.Add(new Point(snake[^1].X, snake[^1].Y)); score++;
+            }
+            else if (fruitState == FruitStates.Blueberry)
+            {
+                snake.Add(new Point(snake[^1].X, snake[^1].Y)); score++;
+                snake.Add(new Point(snake[^1].X, snake[^1].Y)); score++;
+                snake.Add(new Point(snake[^1].X, snake[^1].Y)); score++;
+            }
+        }
         snake.Insert(0, newHead);
     }
 
+
+    #region grid magic
     public bool GridCheck(Point gridPos, Predicate<GridState> predicate)
     {
         return predicate.Invoke(grid[gridPos.X, gridPos.Y]);
@@ -188,4 +256,5 @@ public class Game1 : Game
         }
         return point;
     }
+    #endregion
 }

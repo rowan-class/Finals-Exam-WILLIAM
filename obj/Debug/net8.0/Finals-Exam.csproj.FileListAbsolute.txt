@@ -31,3 +31,4 @@
 /Users/jiaweilyu/Code/MonoGame/Intro Game Programming/Finals-Exam/obj/Debug/net8.0/Finals-Exam.pdb
 /Users/jiaweilyu/Code/MonoGame/Intro Game Programming/Finals-Exam/obj/Debug/net8.0/Finals-Exam.genruntimeconfig.cache
 /Users/jiaweilyu/Code/MonoGame/Intro Game Programming/Finals-Exam/obj/Debug/net8.0/ref/Finals-Exam.dll
+/Users/jiaweilyu/Code/MonoGame/Intro Game Programming/Finals-Exam/bin/Debug/net8.0/Content/Arial.xnb
