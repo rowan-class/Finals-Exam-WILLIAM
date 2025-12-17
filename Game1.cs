@@ -86,7 +86,7 @@ public class Game1 : Game
 
         // TODO: Add your update logic here
         moveTimer += gameTime.ElapsedGameTime.Milliseconds;
-        if (moveTimer > moveTime * MathF.Pow(0.7f, score % 3))
+        if (moveTimer > moveTime * MathF.Pow(0.9f, (score / 3)))
         {
             moveTimer = 0;
             SnakeMove();
